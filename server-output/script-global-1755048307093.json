@@ -1,0 +1,85 @@
+{
+  "id": 1755048307093,
+  "type": "global",
+  "title": "Future Tech That Will Blow Your Mind",
+  "totalDuration": 60,
+  "createdAt": "2025-08-13T01:25:07.093Z",
+  "scenes": [
+    {
+      "sceneNumber": 1,
+      "timeRange": "0-3s",
+      "text": "These technologies will change everything by 2030!",
+      "visual": "강력한 훅 화면 + 제목",
+      "audioNote": "에너지 넘치는 톤으로 시청자 관심 끌기"
+    },
+    {
+      "sceneNumber": 2,
+      "timeRange": "3-8s",
+      "text": "Future Tech That Will Blow Your Mind",
+      "visual": "메인 제목 카드 + 브랜딩",
+      "audioNote": "명확하고 자신감 있는 톤"
+    },
+    {
+      "sceneNumber": 3,
+      "timeRange": "8-50s",
+      "text": "Brain-computer interfaces. Quantum computing for everyone. Self-healing materials. Holographic displays",
+      "visual": "핵심 내용 시각화 + 인포그래픽",
+      "audioNote": "정보 전달 중심, 적절한 페이싱"
+    },
+    {
+      "sceneNumber": 4,
+      "timeRange": "50-57s",
+      "text": "이 정보가 도움되셨다면 좋아요와 구독 부탁드려요!",
+      "visual": "구독 버튼 애니메이션",
+      "audioNote": "친근하고 감사한 톤"
+    },
+    {
+      "sceneNumber": 5,
+      "timeRange": "57-60s",
+      "text": "다음 영상도 기대해주세요!",
+      "visual": "채널 로고 + 다음 영상 미리보기",
+      "audioNote": "기대감 조성"
+    }
+  ],
+  "metadata": {
+    "platform": {
+      "youtube": {
+        "title": "Future Tech That Will Blow Your Mind",
+        "description": "These technologies will change everything by 2030!\n\n📌 타임스탬프:\n0:00 인트로\n0:08 메인 내용\n0:50 마무리",
+        "hashtags": [
+          "#LifeHacks",
+          "#Productivity",
+          "#Viral",
+          "#Shorts",
+          "#Educational"
+        ],
+        "category": "Education"
+      },
+      "instagram": {
+        "caption": "Future Tech That Will Blow Your Mind\n\nThese technologies will change everything by 2030!\n.\n.\n.\n#LifeHacks #Productivity #Reels #Viral",
+        "hashtags": [
+          "lifehacks",
+          "productivity",
+          "reels",
+          "viral",
+          "educational"
+        ]
+      },
+      "tiktok": {
+        "description": "Future Tech That Will Blow Your Mind #lifehacks #productivity #fyp #viral",
+        "hashtags": [
+          "lifehacks",
+          "productivity",
+          "fyp",
+          "viral"
+        ]
+      }
+    },
+    "estimatedMetrics": {
+      "duration": "60s",
+      "targetViews": "3.2M",
+      "engagementRate": "8-12%",
+      "viralPotential": 92
+    }
+  }
+}

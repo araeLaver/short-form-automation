@@ -1,0 +1,9 @@
+generated-videos/
+temp/
+server-output/
+logs/
+*.mp3
+*.mp4
+*.png
+*.jpg
+*.wav

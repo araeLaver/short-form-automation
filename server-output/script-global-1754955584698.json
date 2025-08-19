@@ -1,0 +1,85 @@
+{
+  "id": 1754955584698,
+  "type": "global",
+  "title": "The Psychology of Colors in Design",
+  "totalDuration": 60,
+  "createdAt": "2025-08-11T23:39:44.698Z",
+  "scenes": [
+    {
+      "sceneNumber": 1,
+      "timeRange": "0-3s",
+      "text": "Why red makes you buy more and blue makes you trust!",
+      "visual": "강력한 훅 화면 + 제목",
+      "audioNote": "에너지 넘치는 톤으로 시청자 관심 끌기"
+    },
+    {
+      "sceneNumber": 2,
+      "timeRange": "3-8s",
+      "text": "The Psychology of Colors in Design",
+      "visual": "메인 제목 카드 + 브랜딩",
+      "audioNote": "명확하고 자신감 있는 톤"
+    },
+    {
+      "sceneNumber": 3,
+      "timeRange": "8-50s",
+      "text": "Red creates urgency and appetite. Blue builds trust and calm. Green represents growth and health. Yellow grabs attention and energy",
+      "visual": "핵심 내용 시각화 + 인포그래픽",
+      "audioNote": "정보 전달 중심, 적절한 페이싱"
+    },
+    {
+      "sceneNumber": 4,
+      "timeRange": "50-57s",
+      "text": "이 정보가 도움되셨다면 좋아요와 구독 부탁드려요!",
+      "visual": "구독 버튼 애니메이션",
+      "audioNote": "친근하고 감사한 톤"
+    },
+    {
+      "sceneNumber": 5,
+      "timeRange": "57-60s",
+      "text": "다음 영상도 기대해주세요!",
+      "visual": "채널 로고 + 다음 영상 미리보기",
+      "audioNote": "기대감 조성"
+    }
+  ],
+  "metadata": {
+    "platform": {
+      "youtube": {
+        "title": "The Psychology of Colors in Design",
+        "description": "Why red makes you buy more and blue makes you trust!\n\n📌 타임스탬프:\n0:00 인트로\n0:08 메인 내용\n0:50 마무리",
+        "hashtags": [
+          "#LifeHacks",
+          "#Productivity",
+          "#Viral",
+          "#Shorts",
+          "#Educational"
+        ],
+        "category": "Education"
+      },
+      "instagram": {
+        "caption": "The Psychology of Colors in Design\n\nWhy red makes you buy more and blue makes you trust!\n.\n.\n.\n#LifeHacks #Productivity #Reels #Viral",
+        "hashtags": [
+          "lifehacks",
+          "productivity",
+          "reels",
+          "viral",
+          "educational"
+        ]
+      },
+      "tiktok": {
+        "description": "The Psychology of Colors in Design #lifehacks #productivity #fyp #viral",
+        "hashtags": [
+          "lifehacks",
+          "productivity",
+          "fyp",
+          "viral"
+        ]
+      }
+    },
+    "estimatedMetrics": {
+      "duration": "60s",
+      "targetViews": "1.8M",
+      "engagementRate": "8-12%",
+      "viralPotential": 78
+    }
+  }
+}

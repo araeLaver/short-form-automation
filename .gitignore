@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+*.lock
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Grunt intermediate storage
+.grunt/
+
+# Build outputs
+dist/
+build/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# FFmpeg binaries (too large for GitHub)
+ffmpeg-extracted/
+ffmpeg.zip
+
+# Generated videos and outputs
+generated-videos/
+output/
+*.mp4
+*.mp3
+*.png
+*.jpg
+*.gif
+*.webm
+
+# Temporary files
+tmp/
+temp/

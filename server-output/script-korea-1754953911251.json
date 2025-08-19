@@ -1,0 +1,85 @@
+{
+  "id": 1754953911251,
+  "type": "korea",
+  "title": "AI 기술의 급속한 발전과 미래 전망",
+  "totalDuration": 60,
+  "createdAt": "2025-08-11T23:11:51.251Z",
+  "scenes": [
+    {
+      "sceneNumber": 1,
+      "timeRange": "0-3s",
+      "text": "인공지능이 우리 삶을 어떻게 바꾸고 있는지 알아봅니다.",
+      "visual": "강력한 훅 화면 + 제목",
+      "audioNote": "에너지 넘치는 톤으로 시청자 관심 끌기"
+    },
+    {
+      "sceneNumber": 2,
+      "timeRange": "3-8s",
+      "text": "AI 기술의 급속한 발전과 미래 전망",
+      "visual": "메인 제목 카드 + 브랜딩",
+      "audioNote": "명확하고 자신감 있는 톤"
+    },
+    {
+      "sceneNumber": 3,
+      "timeRange": "8-50s",
+      "text": "인공지능이 우리 삶을 어떻게 바꾸고 있는지 알아봅니다.",
+      "visual": "핵심 내용 시각화 + 인포그래픽",
+      "audioNote": "정보 전달 중심, 적절한 페이싱"
+    },
+    {
+      "sceneNumber": 4,
+      "timeRange": "50-57s",
+      "text": "이 정보가 도움되셨다면 좋아요와 구독 부탁드려요!",
+      "visual": "구독 버튼 애니메이션",
+      "audioNote": "친근하고 감사한 톤"
+    },
+    {
+      "sceneNumber": 5,
+      "timeRange": "57-60s",
+      "text": "다음 영상도 기대해주세요!",
+      "visual": "채널 로고 + 다음 영상 미리보기",
+      "audioNote": "기대감 조성"
+    }
+  ],
+  "metadata": {
+    "platform": {
+      "youtube": {
+        "title": "AI 기술의 급속한 발전과 미래 전망",
+        "description": "인공지능이 우리 삶을 어떻게 바꾸고 있는지 알아봅니다.\n\n📌 타임스탬프:\n0:00 인트로\n0:08 메인 내용\n0:50 마무리",
+        "hashtags": [
+          "#한국뉴스",
+          "#이슈",
+          "#정보",
+          "#숏츠",
+          "#트렌드"
+        ],
+        "category": "뉴스 및 정치"
+      },
+      "instagram": {
+        "caption": "AI 기술의 급속한 발전과 미래 전망\n\n인공지능이 우리 삶을 어떻게 바꾸고 있는지 알아봅니다.\n.\n.\n.\n#한국뉴스 #이슈 #정보 #릴스",
+        "hashtags": [
+          "한국뉴스",
+          "이슈",
+          "정보",
+          "릴스",
+          "트렌드"
+        ]
+      },
+      "tiktok": {
+        "description": "AI 기술의 급속한 발전과 미래 전망 #한국뉴스 #이슈 #fyp",
+        "hashtags": [
+          "한국뉴스",
+          "이슈",
+          "fyp",
+          "트렌드"
+        ]
+      }
+    },
+    "estimatedMetrics": {
+      "duration": "60s",
+      "targetViews": "1M+",
+      "engagementRate": "8-12%",
+      "viralPotential": 75
+    }
+  }
+}

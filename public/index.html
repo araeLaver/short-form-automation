@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>숏폼 자동화 프로토타입</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-video"></i> 숏폼 자동화 프로토타입</h1>
+                <p class="subtitle">AI 기반 자동 숏폼 콘텐츠 생성 시스템</p>
+                <div class="status" id="status">
+                    <i class="fas fa-circle status-dot"></i>
+                    <span>서버 연결 확인 중...</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="main">
+            <div class="control-panel">
+                <h2><i class="fas fa-control"></i> 콘텐츠 생성</h2>
+                <div class="buttons">
+                    <button class="btn btn-korea" onclick="generateKoreaContent()">
+                        <i class="fas fa-flag"></i>
+                        <span>한국 뉴스 콘텐츠</span>
+                        <small>실시간 이슈 기반</small>
+                    </button>
+                    <button class="btn btn-global" onclick="generateGlobalContent()">
+                        <i class="fas fa-globe"></i>
+                        <span>글로벌 콘텐츠</span>
+                        <small>바이럴 주제 기반</small>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 프롬프트 추출 기능 -->
+            <div class="prompt-extractor-panel">
+                <h2><i class="fas fa-magic"></i> 스마트 프롬프트 추출기</h2>
+                <p class="subtitle">긴 내용이나 요약본을 넣으면 숏폼에 적합한 콘텐츠로 자동 변환해드립니다</p>
+                
+                <div class="extractor-form">
+                    <div class="form-group">
+                        <label for="rawContent">원본 내용 또는 요약본</label>
+                        <textarea id="rawContent" placeholder="예: 
+• 최근 ChatGPT가 큰 인기를 끌고 있습니다
+• AI 기술이 빠르게 발전하고 있어 많은 사람들이 관심을 가지고 있습니다  
+• 일상생활에서 AI를 활용하는 방법들이 늘어나고 있습니다
+• 향후 10년간 AI가 어떻게 발전할지 전망해봅시다
+
+또는 긴 글, 뉴스 기사, 블로그 포스트 등을 붙여넣어 주세요..." 
+                                rows="8"></textarea>
+                        <small><span id="rawContentLength">0</span>자</small>
+                    </div>
+                    
+                    <div class="extractor-options">
+                        <div class="form-group">
+                            <label for="targetRegion">타겟 지역</label>
+                            <select id="targetRegion" onchange="updateStyleOptions()">
+                                <option value="korea">🇰🇷 대한민국 (정보전달형)</option>
+                                <option value="global">🌍 해외 (감정어필형)</option>
+                            </select>
+                            <small id="regionDescription">자막, 이미지 나열, 음성/자막 중심의 정보 전달</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="extractorTone">톤앤매너</label>
+                            <select id="extractorTone">
+                                <option value="informative">정보 전달형 (차근차근 설명)</option>
+                                <option value="exciting">흥미진진형 (놀라운, 대박)</option>
+                                <option value="friendly">친근한형 (쉽고 재미있게)</option>
+                                <option value="professional">전문가형 (신뢰감 있게)</option>
+                                <option value="trendy">트렌디형 (MZ 세대 스타일)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="extractorLength">콘텐츠 길이</label>
+                            <select id="extractorLength">
+                                <option value="short">짧게 (30초 이하)</option>
+                                <option value="medium">보통 (30-60초)</option>
+                                <option value="long">길게 (60초 이상)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="btn btn-primary extractor-btn" onclick="extractPrompt()">
+                        <i class="fas fa-wand-magic-sparkles"></i> 스마트 프롬프트 추출하기
+                    </button>
+                </div>
+                
+                <!-- 추출 결과 -->
+                <div id="extractedResult" class="extracted-result" style="display: none;">
+                    <h3><i class="fas fa-lightbulb"></i> 추출된 프롬프트</h3>
+                    <div class="result-content">
+                        <div class="result-item">
+                            <label>추천 제목:</label>
+                            <div id="extractedTitle" class="result-text"></div>
+                            <button class="copy-btn" onclick="copyToClipboard('extractedTitle')">복사</button>
+                            <button class="translate-btn" onclick="translateToEnglish('extractedTitle')">🌍 영어</button>
+                        </div>
+                        
+                        <div class="result-item">
+                            <label>숏폼 콘텐츠:</label>
+                            <div id="extractedContent" class="result-text"></div>
+                            <button class="copy-btn" onclick="copyToClipboard('extractedContent')">복사</button>
+                            <button class="translate-btn" onclick="translateToEnglish('extractedContent')">🌍 영어</button>
+                        </div>
+                        
+                        <div class="result-item">
+                            <label>추천 카테고리:</label>
+                            <div id="extractedCategory" class="result-text"></div>
+                        </div>
+                        
+                        <div class="result-item">
+                            <label>추천 해시태그:</label>
+                            <div id="extractedHashtags" class="result-text"></div>
+                            <button class="copy-btn" onclick="copyToClipboard('extractedHashtags')">복사</button>
+                            <button class="translate-btn" onclick="translateToEnglish('extractedHashtags')">🌍 영어</button>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-success" onclick="useExtractedContent()">
+                        <i class="fas fa-arrow-down"></i> 아래 맞춤 콘텐츠 생성에 적용하기
+                    </button>
+                    
+                    <button class="btn btn-primary" onclick="generateVideoPrompts()" style="margin-top: 10px;">
+                        <i class="fas fa-video"></i> AI 동영상 생성 프롬프트 만들기
+                    </button>
+                </div>
+                
+                <!-- AI 동영상 프롬프트 결과 -->
+                <div id="videoPromptsResult" class="video-prompts-result" style="display: none;">
+                    <h3><i class="fas fa-film"></i> AI 동영상 생성 프롬프트</h3>
+                    <div class="prompts-grid">
+                        <div class="prompt-card">
+                            <h4><i class="fas fa-camera"></i> 메인 비주얼 프롬프트</h4>
+                            <div id="mainVisualPrompt" class="prompt-text"></div>
+                            <button class="copy-btn" onclick="copyToClipboard('mainVisualPrompt')">복사</button>
+                        </div>
+                        
+                        <div class="prompt-card">
+                            <h4><i class="fas fa-play"></i> 샷별 상세 프롬프트</h4>
+                            <div id="shotPromptsContainer"></div>
+                        </div>
+                        
+                        <div class="prompt-card">
+                            <h4><i class="fas fa-cog"></i> 기술적 설정</h4>
+                            <div id="technicalSettings" class="prompt-text"></div>
+                            <button class="copy-btn" onclick="copyToClipboard('technicalSettings')">복사</button>
+                        </div>
+                        
+                        <div class="prompt-card">
+                            <h4><i class="fas fa-palette"></i> 스타일 가이드</h4>
+                            <div id="styleGuide" class="prompt-text"></div>
+                            <button class="copy-btn" onclick="copyToClipboard('styleGuide')">복사</button>
+                        </div>
+                    </div>
+                    
+                    <div class="ai-platforms">
+                        <h4><i class="fas fa-robot"></i> 추천 AI 동영상 플랫폼</h4>
+                        <div class="platform-buttons">
+                            <a href="https://runwayml.com" target="_blank" class="platform-btn runway">
+                                <i class="fas fa-external-link-alt"></i> Runway ML
+                                <small>고품질 동영상</small>
+                            </a>
+                            <a href="https://pika.art" target="_blank" class="platform-btn pika">
+                                <i class="fas fa-external-link-alt"></i> Pika Labs
+                                <small>빠른 생성</small>
+                            </a>
+                            <a href="https://openai.com/sora" target="_blank" class="platform-btn sora">
+                                <i class="fas fa-external-link-alt"></i> OpenAI Sora
+                                <small>최고 품질</small>
+                            </a>
+                            <a href="https://lumalabs.ai" target="_blank" class="platform-btn luma">
+                                <i class="fas fa-external-link-alt"></i> Luma Dream
+                                <small>자연스러운 움직임</small>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="custom-content-panel">
+                <h2><i class="fas fa-edit"></i> 맞춤 콘텐츠 생성</h2>
+                <p class="subtitle">직접 내용을 입력하여 나만의 숏폼 영상을 만들어보세요</p>
+                
+                <form class="custom-form" onsubmit="generateCustomContent(event)">
+                    <div class="form-group">
+                        <label for="customTitle">제목 (선택사항)</label>
+                        <input type="text" id="customTitle" placeholder="예: AI 기술의 미래 (비워두면 자동 생성됩니다)">
+                        <small>제목을 입력하지 않으면 내용을 바탕으로 자동 생성합니다</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customContent">내용 또는 요약본 <span class="required">*</span></label>
+                        <textarea id="customContent" placeholder="예: 인공지능 기술이 우리 생활을 어떻게 변화시키고 있는지 알아봅시다. 스마트폰부터 자율주행차까지 다양한 분야에서 AI가 혁신을 이끌고 있습니다..." 
+                                required rows="6"></textarea>
+                        <small><span id="contentLength">0</span>자 (제한 없음)</small>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="customCategory">카테고리</label>
+                            <select id="customCategory">
+                                <option value="기술">기술</option>
+                                <option value="교육">교육</option>
+                                <option value="라이프스타일">라이프스타일</option>
+                                <option value="비즈니스">비즈니스</option>
+                                <option value="건강">건강</option>
+                                <option value="요리">요리</option>
+                                <option value="여행">여행</option>
+                                <option value="엔터테인먼트">엔터테인먼트</option>
+                                <option value="기타">기타</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customDuration">영상 길이</label>
+                            <select id="customDuration">
+                                <option value="auto">자동 (내용에 맞게)</option>
+                                <option value="30">30초</option>
+                                <option value="45">45초</option>
+                                <option value="60">60초</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customHashtags">추가 해시태그 (선택사항)</label>
+                        <input type="text" id="customHashtags" placeholder="예: #AI #기술 #미래 #혁신" maxlength="100">
+                        <small>공백으로 구분하여 입력하세요</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-custom">
+                        <i class="fas fa-magic"></i>
+                        <span>맞춤 동영상 생성</span>
+                        <small>내 콘텐츠로 만들기</small>
+                    </button>
+                </form>
+            </div>
+
+            <div class="results-panel">
+                <h2><i class="fas fa-chart-line"></i> 생성 결과</h2>
+                <div class="loading" id="loading" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <span>콘텐츠 생성 중...</span>
+                </div>
+                <div class="result-container" id="resultContainer" style="display: none;">
+                    <!-- 결과가 여기에 표시됩니다 -->
+                </div>
+            </div>
+
+            <div class="files-panel">
+                <h2><i class="fas fa-folder"></i> 생성된 파일</h2>
+                <button class="btn btn-secondary" onclick="loadFilesList()">
+                    <i class="fas fa-refresh"></i> 파일 목록 새로고침
+                </button>
+                <div class="files-list" id="filesList">
+                    <div class="empty-state">
+                        <i class="fas fa-file-alt"></i>
+                        <p>생성된 파일이 없습니다</p>
+                        <small>콘텐츠를 생성하면 여기에 표시됩니다</small>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="stats">
+                <div class="stat">
+                    <i class="fas fa-clock"></i>
+                    <span>평균 생성 시간: <strong>2-3초</strong></span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-check-circle"></i>
+                    <span>성공률: <strong>99.9%</strong></span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-bolt"></i>
+                    <span>프로토타입 버전: <strong>1.0.0</strong></span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal for detailed view -->
+    <div class="modal" id="detailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle"></h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- 상세 내용이 여기에 표시됩니다 -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

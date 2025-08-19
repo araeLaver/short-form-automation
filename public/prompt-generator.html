@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 프롬프트 생성기 - 창의적 콘텐츠 제작 도구</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #fff, #f0f8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .main-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            box-shadow: 
+                0 25px 80px rgba(0,0,0,0.15),
+                0 0 0 1px rgba(255,255,255,0.2);
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.18);
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        .input-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f5f5f5;
+        }
+
+        .input-tab {
+            flex: 1;
+            padding: 15px;
+            background: #f5f5f5;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .input-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .input-tab:hover:not(.active) {
+            background: #e0e0e0;
+        }
+
+        .input-content {
+            display: none;
+        }
+
+        .input-content.active {
+            display: block;
+        }
+
+        .input-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .text-input, .url-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            resize: vertical;
+        }
+
+        .text-input {
+            min-height: 150px;
+        }
+
+        .url-input {
+            margin-bottom: 15px;
+        }
+
+        .text-input:focus, .url-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .fetch-btn {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .fetch-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-1px);
+        }
+
+        .fetch-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .options {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .option-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .option-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .option-select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-translate {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-translate:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .results {
+            display: none;
+            margin-top: 40px;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .result-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-lang {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #667eea;
+            color: white;
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+
+        .prompt-list {
+            list-style: none;
+        }
+
+        .prompt-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .prompt-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+
+        .prompt-type {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #764ba2;
+            color: white;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 10px;
+        }
+
+        .prompt-text {
+            margin-top: 12px;
+            line-height: 1.6;
+            color: #2c3e50;
+            font-size: 0.95rem;
+            font-weight: 400;
+            padding-right: 80px;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .prompt-item:hover .copy-btn {
+            opacity: 1;
+        }
+
+        .copy-btn:hover {
+            background: #5a67d8;
+        }
+
+        .keywords-container, .hashtags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .keyword-tag, .hashtag-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .hashtag-tag {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .keyword-tag:hover, .hashtag-tag:hover {
+            transform: scale(1.05);
+        }
+
+        .content-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .content-box:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .script-box {
+            border-left-color: #28a745;
+        }
+
+        .share-box {
+            border-left-color: #ffc107;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: none;
+            animation: slideIn 0.3s;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .error-message {
+            background: #ff5252;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .lang-toggle {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .current-lang {
+            background: #f8f9fa;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .options {
+                flex-direction: column;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✨ 창의적 AI 콘텐츠 마법사</h1>
+            <p>🚀 텍스트와 URL을 프로급 AI 프롬프트와 바이럴 콘텐츠로 변환하는 스마트 도구</p>
+        </div>
+
+        <div class="main-card">
+            <div class="input-section">
+                <div class="input-tabs">
+                    <button class="input-tab active" onclick="switchInputTab('text')">
+                        📝 직접 입력
+                    </button>
+                    <button class="input-tab" onclick="switchInputTab('url')">
+                        🔗 URL에서 가져오기
+                    </button>
+                </div>
+
+                <div id="textInputContent" class="input-content active">
+                    <label class="input-label">텍스트 입력 (기사, 스크립트, 요약본)</label>
+                    <textarea 
+                        id="textInput" 
+                        class="text-input" 
+                        placeholder="기사, 스크립트, 또는 요약본을 여기에 붙여넣으세요..."
+                    ></textarea>
+                </div>
+
+                <div id="urlInputContent" class="input-content">
+                    <label class="input-label">URL 입력</label>
+                    <input 
+                        type="url" 
+                        id="urlInput" 
+                        class="url-input" 
+                        placeholder="https://example.com/article"
+                    />
+                    <button class="fetch-btn" onclick="fetchFromUrl()" id="fetchBtn">
+                        🌐 URL에서 콘텐츠 가져오기
+                    </button>
+                    <div style="margin-bottom: 10px;">
+                        <small style="color: #666;">
+                            💡 뉴스 기사, 블로그 포스트 등의 URL을 입력하면 자동으로 내용을 추출합니다
+                        </small>
+                    </div>
+                    <textarea 
+                        id="extractedText" 
+                        class="text-input" 
+                        placeholder="추출된 콘텐츠가 여기에 표시됩니다..."
+                        style="min-height: 120px;"
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div class="options">
+                    <div class="option-group">
+                        <label class="option-label">생성 타입</label>
+                        <select id="typeSelect" class="option-select">
+                            <option value="both">이미지 + 비디오</option>
+                            <option value="image">이미지만</option>
+                            <option value="video">비디오만</option>
+                        </select>
+                    </div>
+                    <div class="option-group">
+                        <label class="option-label">버전 개수</label>
+                        <select id="countSelect" class="option-select">
+                            <option value="3">3개</option>
+                            <option value="5">5개</option>
+                            <option value="7">7개</option>
+                            <option value="10">10개</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button class="btn btn-primary" onclick="generatePrompts()">
+                        🚀 AI 프롬프트 생성
+                    </button>
+                    <button class="btn btn-secondary" onclick="generateQuickPrompt()">
+                        ⚡ 빠른 생성
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearAll()">
+                        🔄 초기화
+                    </button>
+                </div>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p style="margin-top: 15px; color: #666;">AI가 프롬프트를 생성하고 있습니다...</p>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+
+            <div class="results" id="results">
+                <div class="lang-toggle">
+                    <div class="current-lang" id="currentLang">📍 Current Language: English</div>
+                    <div class="language-buttons">
+                        <button class="btn btn-translate" onclick="switchLanguage('ko')" id="translateToKo" style="display: none;">
+                            🇰🇷 한국어로 번역
+                        </button>
+                        <button class="btn btn-translate" onclick="switchLanguage('en')" id="translateToEn" style="display: none;">
+                            🇺🇸 Translate to English
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">✅ 클립보드에 복사되었습니다!</div>
+
+    <script>
+        let currentData = null;
+        let currentLanguage = 'en';
+
+        // Tab switching
+        function switchInputTab(tab) {
+            document.querySelectorAll('.input-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.input-content').forEach(c => c.classList.remove('active'));
+            if (tab === 'text') {
+                document.getElementById('textInputContent').classList.add('active');
+            } else {
+                document.getElementById('urlInputContent').classList.add('active');
+            }
+        }
+
+        // Fetch content from URL
+        async function fetchFromUrl() {
+            const url = document.getElementById('urlInput').value.trim();
+            if (!url) {
+                showError('URL을 입력해주세요!');
+                return;
+            }
+
+            const fetchBtn = document.getElementById('fetchBtn');
+            const originalText = fetchBtn.textContent;
+            
+            fetchBtn.disabled = true;
+            fetchBtn.textContent = '🔄 가져오는 중...';
+            hideError();
+
+            try {
+                const response = await fetch('/api/prompts/extract-from-url', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    const extractedTextArea = document.getElementById('extractedText');
+                    extractedTextArea.value = data.data.content;
+                    extractedTextArea.readOnly = false;
+                    showToast('콘텐츠를 성공적으로 가져왔습니다!');
+                } else {
+                    showError(data.error || 'URL에서 콘텐츠를 가져오는데 실패했습니다');
+                }
+            } catch (error) {
+                console.error('URL Fetch Error:', error);
+                showError('URL에서 콘텐츠를 가져오는 중 오류가 발생했습니다');
+            } finally {
+                fetchBtn.disabled = false;
+                fetchBtn.textContent = originalText;
+            }
+        }
+
+        // Get current active text
+        function getCurrentText() {
+            const activeTab = document.querySelector('.input-tab.active').textContent.includes('직접 입력') ? 'text' : 'url';
+            
+            if (activeTab === 'text') {
+                return document.getElementById('textInput').value.trim();
+            } else {
+                return document.getElementById('extractedText').value.trim();
+            }
+        }
+
+        // Generate prompts
+        async function generatePrompts() {
+            const text = getCurrentText();
+            if (!text) {
+                showError('텍스트를 입력해주세요!');
+                return;
+            }
+
+            const type = document.getElementById('typeSelect').value;
+            const count = document.getElementById('countSelect').value;
+
+            showLoading(true);
+            hideError();
+
+            try {
+                const response = await fetch('/api/prompts/generate-prompts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text, type, count })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentData = data.data;
+                    currentLanguage = 'en';
+                    displayResults(data.data);
+                } else {
+                    showError(data.error || '프롬프트 생성에 실패했습니다');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('서버 연결에 실패했습니다');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Quick generate
+        async function generateQuickPrompt() {
+            const text = getCurrentText();
+            if (!text) {
+                showError('텍스트를 입력해주세요!');
+                return;
+            }
+
+            showLoading(true);
+            hideError();
+
+            try {
+                const response = await fetch('/api/prompts/quick-prompt', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentData = data.data;
+                    currentLanguage = 'en';
+                    displayResults(data.data);
+                } else {
+                    showError(data.error || '빠른 생성에 실패했습니다');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('서버 연결에 실패했습니다');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Translate to Korean
+        async function switchLanguage(targetLang) {
+            if (!currentData) {
+                showError('번역할 데이터가 없습니다');
+                return;
+            }
+
+            const translateBtn = document.getElementById('translateBtn');
+            const originalText = translateBtn.textContent;
+            
+            translateBtn.disabled = true;
+            translateBtn.textContent = '🔄 번역 중...';
+            showLoading(true);
+
+            try {
+                const response = await fetch('/api/prompts/translate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ data: currentData, targetLang: targetLang })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    currentLanguage = targetLang;
+                    displayResults(result.data);
+                } else {
+                    showError(result.error || '번역에 실패했습니다');
+                }
+            } catch (error) {
+                console.error('Translation Error:', error);
+                showError('번역에 실패했습니다');
+            } finally {
+                showLoading(false);
+                translateBtn.disabled = false;
+                translateBtn.textContent = originalText;
+            }
+        }
+
+        // Display results
+        function displayResults(data) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            
+            // Language indicator
+            const langToggle = document.createElement('div');
+            langToggle.className = 'lang-toggle';
+            langToggle.innerHTML = `
+                <div class="current-lang" id="currentLang">
+                    📍 Current Language: ${currentLanguage === 'en' ? 'English' : '한국어 (Korean)'}
+                </div>
+                ${currentLanguage === 'en' ? `
+                    <button class="btn btn-translate" onclick="translateToKorean()" id="translateBtn">
+                        🇰🇷 Translate to Korean
+                    </button>
+                ` : `
+                    <div style="color: #28a745; font-weight: 600;">✅ Translated to Korean</div>
+                `}
+            `;
+            resultsDiv.appendChild(langToggle);
+
+            // Summary
+            if (data.summary) {
+                const summarySection = document.createElement('div');
+                summarySection.className = 'result-section';
+                summarySection.innerHTML = `
+                    <h3 class="result-title">📋 Summary</h3>
+                    <div class="content-box" onclick="copyToClipboard(\`${data.summary.replace(/`/g, '\\`')}\`)">
+                        ${data.summary}
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                `;
+                resultsDiv.appendChild(summarySection);
+            }
+
+            // Prompts
+            if (data.prompts) {
+                const promptSection = document.createElement('div');
+                promptSection.className = 'result-section';
+                
+                let promptsHtml = '<h3 class="result-title">🎯 AI 프롬프트 마스터피스</h3><ul class="prompt-list">';
+                
+                // Image prompts
+                if (data.prompts.image && data.prompts.image.length > 0) {
+                    data.prompts.image.forEach((prompt, index) => {
+                        promptsHtml += `
+                            <li class="prompt-item" onclick="copyToClipboard(\`${prompt.replace(/`/g, '\\`')}\`)">
+                                <span class="prompt-type">🖼️ Image ${index + 1}</span>
+                                <div class="prompt-text">${prompt}</div>
+                                <button class="copy-btn">Copy</button>
+                            </li>
+                        `;
+                    });
+                }
+                
+                // Video prompts
+                if (data.prompts.video && data.prompts.video.length > 0) {
+                    data.prompts.video.forEach((prompt, index) => {
+                        promptsHtml += `
+                            <li class="prompt-item" onclick="copyToClipboard(\`${prompt.replace(/`/g, '\\`')}\`)">
+                                <span class="prompt-type">🎬 Video ${index + 1}</span>
+                                <div class="prompt-text">${prompt}</div>
+                                <button class="copy-btn">Copy</button>
+                            </li>
+                        `;
+                    });
+                }
+                
+                promptsHtml += '</ul>';
+                promptSection.innerHTML = promptsHtml;
+                resultsDiv.appendChild(promptSection);
+            }
+
+            // Keywords
+            if (data.keywords && data.keywords.length > 0) {
+                const keywordSection = document.createElement('div');
+                keywordSection.className = 'result-section';
+                keywordSection.innerHTML = `
+                    <h3 class="result-title">🏷️ Keywords</h3>
+                    <div class="keywords-container">
+                        ${data.keywords.map(kw => 
+                            `<span class="keyword-tag" onclick="copyToClipboard('${kw}')">${kw}</span>`
+                        ).join('')}
+                    </div>
+                `;
+                resultsDiv.appendChild(keywordSection);
+            }
+
+            // Hashtags
+            if (data.hashtags && data.hashtags.length > 0) {
+                const hashtagSection = document.createElement('div');
+                hashtagSection.className = 'result-section';
+                hashtagSection.innerHTML = `
+                    <h3 class="result-title">📱 Hashtags</h3>
+                    <div class="hashtags-container">
+                        ${data.hashtags.map(tag => 
+                            `<span class="hashtag-tag" onclick="copyToClipboard('${tag}')">${tag}</span>`
+                        ).join('')}
+                    </div>
+                `;
+                resultsDiv.appendChild(hashtagSection);
+            }
+
+            // Video Script
+            if (data.videoScript) {
+                const scriptSection = document.createElement('div');
+                scriptSection.className = 'result-section';
+                scriptSection.innerHTML = `
+                    <h3 class="result-title">🎬 Video Script</h3>
+                    <div class="content-box script-box" onclick="copyToClipboard(\`${data.videoScript.replace(/`/g, '\\`')}\`)">
+                        ${data.videoScript}
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                `;
+                resultsDiv.appendChild(scriptSection);
+            }
+
+            // Shareable Content
+            if (data.shareableLinks) {
+                const shareSection = document.createElement('div');
+                shareSection.className = 'result-section';
+                shareSection.innerHTML = `
+                    <h3 class="result-title">🔗 Shareable Content</h3>
+                    <div class="content-box share-box" onclick="copyToClipboard(\`${data.shareableLinks.suggestedTitle.replace(/`/g, '\\`')}\`)">
+                        <strong>Title:</strong> ${data.shareableLinks.suggestedTitle}
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <div class="content-box share-box" onclick="copyToClipboard(\`${data.shareableLinks.description.replace(/`/g, '\\`')}\`)" style="margin-top: 10px;">
+                        <strong>Description:</strong> ${data.shareableLinks.description}
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                `;
+                resultsDiv.appendChild(shareSection);
+            }
+
+            resultsDiv.classList.add('active');
+        }
+
+        // Copy to clipboard
+        function copyToClipboard(text) {
+            event.stopPropagation();
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showToast();
+            }).catch(err => {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast();
+            });
+        }
+
+        // Utility functions
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        function showLoading(show) {
+            const loading = document.getElementById('loading');
+            if (show) {
+                loading.classList.add('active');
+            } else {
+                loading.classList.remove('active');
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = '❌ ' + message;
+            errorDiv.classList.add('show');
+        }
+
+        function hideError() {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.classList.remove('show');
+        }
+
+        function clearAll() {
+            document.getElementById('textInput').value = '';
+            document.getElementById('urlInput').value = '';
+            document.getElementById('extractedText').value = '';
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('results').classList.remove('active');
+            currentData = null;
+            currentLanguage = 'en';
+            hideError();
+        }
+
+        // Example text on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const exampleText = `AI technology is rapidly advancing and bringing significant changes to daily life. 
+Generative AI is revolutionizing creative fields by automatically creating various content including text, images, and videos. 
+Now anyone can easily produce high-quality content.`;
+            
+            document.getElementById('textInput').setAttribute('placeholder', 
+                'Example:\\n' + exampleText + '\\n\\nPaste your content here...');
+        });
+    </script>
+</body>
+</html>

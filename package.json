@@ -1,0 +1,40 @@
+{
+  "name": "short-form-automation",
+  "version": "1.0.0",
+  "description": "Automated short-form video content creation system",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "korea-daily": "node src/schedulers/koreaDaily.js",
+    "global-ai": "node src/schedulers/globalAI.js",
+    "prototype": "node prototype.js",
+    "server": "node server.js",
+    "server-dev": "nodemon server.js",
+    "shortform": "node shortform-server.js",
+    "shortform-dev": "nodemon shortform-server.js",
+    "youtube": "node youtube-shorts-server.js",
+    "youtube-dev": "nodemon youtube-shorts-server.js",
+    "extract": "node simple-text-server.js",
+    "extract-dev": "nodemon simple-text-server.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.59.0",
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^4.18.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "gtts": "^0.2.1",
+    "jimp": "^0.22.0",
+    "node-gtts": "^2.0.2",
+    "replicate": "^1.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1"
+  }
+}
