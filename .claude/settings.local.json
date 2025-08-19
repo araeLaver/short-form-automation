@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(git remote set-url:*)",
-      "Bash(git rev-list:*)"
+      "Bash(git rev-list:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(npm run test:*)",
+      "Bash(npm run lint)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []
