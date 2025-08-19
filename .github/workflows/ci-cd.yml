@@ -1,0 +1,113 @@
+name: 🚀 AI Generation System CI/CD
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  test:
+    name: 🧪 Test & Build
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🟢 Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: 📦 Install dependencies
+      run: |
+        if [ -f package-lock.json ]; then
+          npm ci
+        else
+          npm install
+        fi
+      
+    - name: 🔍 Run linter (if available)
+      run: npm run lint --if-present
+      
+    - name: 🧪 Run tests (if available)
+      run: npm test --if-present
+      
+    - name: 🏗️ Build project (if available)
+      run: npm run build --if-present
+      
+    - name: 🎨 Verify AI Generator
+      run: |
+        echo "✅ Checking main AI generator file..."
+        if [ -f "fixed-ai-generator.js" ]; then
+          echo "✅ fixed-ai-generator.js found"
+          node -c fixed-ai-generator.js
+          echo "✅ Syntax check passed"
+        else
+          echo "❌ Main generator file not found"
+          exit 1
+        fi
+
+  deploy:
+    name: 🚀 Deploy
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🚀 Deployment Ready
+      run: |
+        echo "🎨 AI-Powered Short-form Automation System"
+        echo "✅ All tests passed!"
+        echo "📊 Deployment Information:"
+        echo "  - Commit: ${{ github.sha }}"
+        echo "  - Branch: ${{ github.ref_name }}"
+        echo "  - Timestamp: $(date)"
+        echo "  - Repository: ${{ github.repository }}"
+        
+    - name: 📝 Generate Release Notes
+      run: |
+        echo "## 🎨 Release Notes" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**📅 Deployed:** $(date)" >> $GITHUB_STEP_SUMMARY
+        echo "**🔗 Commit:** [\`$(echo ${{ github.sha }} | cut -c1-7)\`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})" >> $GITHUB_STEP_SUMMARY
+        echo "**🌟 Features:**" >> $GITHUB_STEP_SUMMARY
+        echo "- 16개 AI 이미지 모델 지원" >> $GITHUB_STEP_SUMMARY
+        echo "- 8개 AI 동영상 모델 지원" >> $GITHUB_STEP_SUMMARY
+        echo "- 한국어→영어 자동 번역" >> $GITHUB_STEP_SUMMARY
+        echo "- 게스트 모드 사용 제한" >> $GITHUB_STEP_SUMMARY
+        echo "- 프리미엄 모델 관리자 전용" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**🎮 사용법:** \`node fixed-ai-generator.js\` → http://localhost:3015" >> $GITHUB_STEP_SUMMARY
+        
+  security:
+    name: 🔒 Security Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🔍 Check for secrets
+      run: |
+        echo "🔒 Scanning for potential secrets..."
+        if grep -r "sk-" . --exclude-dir=.git --exclude="*.md" --exclude=".env.example" || \
+           grep -r "r8_" . --exclude-dir=.git --exclude="*.md" --exclude=".env.example"; then
+          echo "❌ Potential secrets found!"
+          echo "Please use environment variables instead."
+          exit 1
+        else
+          echo "✅ No secrets detected in code"
+        fi
+        
+    - name: ✅ Security Passed
+      run: echo "🔐 Security check completed successfully!"
