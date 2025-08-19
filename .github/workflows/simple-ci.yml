@@ -1,0 +1,58 @@
+name: ✅ Simple CI
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  check:
+    name: 🔍 Basic Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        
+    - name: 📦 Check package.json
+      run: |
+        echo "📄 Checking package.json..."
+        if [ -f "package.json" ]; then
+          echo "✅ package.json found"
+          cat package.json | head -10
+        else
+          echo "❌ package.json not found"
+          exit 1
+        fi
+        
+    - name: 🔍 List project files
+      run: |
+        echo "📁 Project structure:"
+        ls -la
+        echo ""
+        echo "📝 Key files:"
+        ls -la *.js 2>/dev/null || echo "No JS files in root"
+        
+    - name: ✅ Verify main file
+      run: |
+        echo "🎨 Checking main AI generator..."
+        if [ -f "fixed-ai-generator.js" ]; then
+          echo "✅ fixed-ai-generator.js exists"
+          echo "File size: $(wc -c < fixed-ai-generator.js) bytes"
+        else
+          echo "❌ Main file not found"
+          exit 1
+        fi
+        
+    - name: 🎉 Success
+      run: |
+        echo "✅ All basic checks passed!"
+        echo "🚀 Project: AI-Powered Short-form Automation"
+        echo "📊 Status: Ready"
+        echo "🎯 Next: Deploy when ready"
